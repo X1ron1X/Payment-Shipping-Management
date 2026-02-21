@@ -13,7 +13,7 @@ namespace Payment_Shipping_System
 
             
 
-            Console.WriteLine("ADDRESS");
+            Console.WriteLine("\nADDRESS");
 
             Console.Write("\nFull Name: ");
             string fname = Console.ReadLine();
