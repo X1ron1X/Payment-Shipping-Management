@@ -6,24 +6,56 @@ namespace Payment_Shipping_System
     {
         static void Main(string[] args)
         {
+
+            Console.Write("Do You Want to Add a ADDRESS(y/n): ");
+            bool chose = false;
+            string choice = Console.ReadLine();
+
+            
+
             Console.WriteLine("ADDRESS");
 
-            Console.WriteLine("Full Name: ");
+            Console.Write("\nFull Name: ");
             string fname = Console.ReadLine();
-            Console.WriteLine("Phone Number: ");
+            Console.Write("\nPhone Number: ");
             string pnum = Console.ReadLine();
-            Console.WriteLine("Region: ");
+            Console.Write("\nRegion: ");
             string reg = Console.ReadLine();
-            Console.WriteLine("Province: ");
+            Console.Write("\nProvince: ");
             string prov = Console.ReadLine();
-            Console.WriteLine("City: ");
+            Console.Write("\nCity: ");
             string city = Console.ReadLine();
-            Console.WriteLine("Barangay: ");
+            Console.Write("\nBarangay: ");
             string brgy = Console.ReadLine();
-            Console.WriteLine("Postal Code: ");
+            Console.Write("\nPostal Code: ");
             string pcode = Console.ReadLine();
-            Console.WriteLine("Street Name, Building, House No.: ");
+            Console.Write("\nStreet Name, Building, House No.: ");
             string sbh = Console.ReadLine();
+        }
+
+        static bool addchoice(bool chose, string choice){
+
+            
+
+            switch (choice)
+            {
+
+                case "y":
+                    chose = true;
+                    break;
+
+                case "n":
+                    chose = false;
+                    break;
+
+                default:
+
+                    choice = Console.ReadLine();
+                    break;
+            }
+
+            return chose;
+
         }
     }
 }
