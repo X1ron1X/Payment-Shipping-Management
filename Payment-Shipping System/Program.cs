@@ -9,7 +9,7 @@ namespace Payment_Shipping_System
 
             bool chose = addchoice();
 
-            while (chose)
+            while (chose == true)
             {
                 Console.WriteLine("[1] Payment Methods\n[2] Address");
 
@@ -37,12 +37,12 @@ namespace Payment_Shipping_System
         static bool addchoice()
         {
 
-            Console.Write("Do You Want to Add a ADDRESS(y/n): ");
+            Console.Write("Do You Want to Run the program(y/n): ");
             bool chose = false;
             string choice = Console.ReadLine();
 
 
-            switch (choice)
+            switch (choice == true)
             {
 
                 case "y":
