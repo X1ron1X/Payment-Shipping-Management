@@ -1,4 +1,4 @@
-﻿using address;
+﻿using Models;
 using DataService;
 using System;
 using System.Collections.Generic;
@@ -13,9 +13,12 @@ namespace AppService
     public class Service
     {
         Data Data = new Data();
+
+        
+        
+
         public bool Address(ADD newadd)
         {
-
             var add = new ADD
             {
                 Name = newadd.Name,
@@ -26,6 +29,29 @@ namespace AppService
             Data.Add(newadd);
             return true;
 
+        }
+
+        
+        public bool AddPayment(Card card)
+        {
+            if (card == null) return false;
+            
+            Data.AddCard(card);
+            return true;
+        }
+
+        public bool AddPayment(Bank bank)
+        {
+            if (bank == null) return false;
+            Data.AddBank(bank);
+            return true;
+        }
+
+        public bool AddPayment(Gcash gcash)
+        {
+            if (gcash == null) return false;
+            Data.AddGcash(gcash);
+            return true;
         }
 
     }

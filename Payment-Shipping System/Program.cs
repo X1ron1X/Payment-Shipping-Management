@@ -1,4 +1,4 @@
-﻿using address;
+﻿using Models;
 using AppService;
 using DataService;
 using System;
@@ -9,6 +9,7 @@ namespace Payment_Shipping_System
 {
     internal class Program
     {
+
         static Service App = new Service();
         static Data Data = new Data();
         static void Main(string[] args)
@@ -16,7 +17,7 @@ namespace Payment_Shipping_System
 
             bool chose = addchoice();
 
-            while (chose == true)
+            while (chose)
             {
                 Console.WriteLine("[1] Payment Methods\n[2] Address");
 
@@ -26,12 +27,12 @@ namespace Payment_Shipping_System
                 if (opt1 == "1")
                 {
                     addpayment();
-                    addchoice();
+                    chose = addchoice();
                 }
                 else if (opt1 == "2")
                 {
                     addaddress();
-                    addchoice();
+                    chose = addchoice();
                 }
                 else
                 {
@@ -62,7 +63,7 @@ namespace Payment_Shipping_System
 
                 default:
 
-                    choice = Console.ReadLine();
+                    Console.WriteLine("Invalid Input");
                     break;
             }
 
@@ -72,15 +73,55 @@ namespace Payment_Shipping_System
 
         static void addpayment()
         {
-            Console.WriteLine("\nPAYMENT METHODS\n");
-            Console.Write("\nCard Number: ");
-            string cnum = Console.ReadLine();
-            Console.Write("\nCard Holder Name: ");
-            string chname = Console.ReadLine();
-            Console.Write("\nExpiration Date(MM/YY): ");
-            string edate = Console.ReadLine();
-            Console.Write("\nCVV: ");
-            string cvv = Console.ReadLine();
+            Console.WriteLine("\nPAYMENT METHODS\n[1] Card\n[2] Bank Account\nGcash");
+            Console.Write("\nEnter (1-3): ");
+            string PM = Console.ReadLine();
+
+            switch (PM) { 
+
+                case "1":
+                    Console.WriteLine("\nCARD\n");
+                    Console.Write("\nFull Name: ");
+                    string Fname = Console.ReadLine();
+                    Console.Write("\nCard Number: ");
+                    string cnum = Console.ReadLine();
+                    Console.Write("\nExpiration Date(YYYY): ");
+                    string edate = Console.ReadLine();
+                    Console.Write("\nCVV: ");
+                    string cvv = Console.ReadLine();
+                    Card newCard = new Card { Name = Fname, CNumber = cnum, EDate = edate, CVV = cvv };
+                    App.AddPayment(newCard);
+                    Console.WriteLine($"Successfully added user {newCard.Name}");
+                    break;
+                case "2":
+                    Console.WriteLine("\nBANK ACCOUNT\n");
+                    Console.Write("\nBank Name: ");
+                    string bname = Console.ReadLine();
+                    Console.Write("\nAccount Number: ");
+                    string anum = Console.ReadLine();
+                    Console.Write("\nAccount Holder Name: ");
+                    string ahname = Console.ReadLine();
+                    
+                    Bank newBank = new Bank { Name = bname, BNumber = anum, Holder = ahname };
+                    App.AddPayment(newBank);
+                    Console.WriteLine($"Successfully added user {newBank.Name}");
+                    break;
+                case "3":
+                    Console.WriteLine("\nGCASH\n");
+                    Console.Write("\nGCash Account Name: ");
+                    string gname = Console.ReadLine();
+                    Console.Write("\nGCash Account Number: ");
+                    string gnum = Console.ReadLine();
+                    
+                    Gcash newGCASH = new Gcash { Name = gname, GNumber = gnum };
+                    App.AddPayment(newGCASH);
+                    Console.WriteLine($"Successfully added user {newGCASH.Name}");
+                    break;
+                default:
+                    Console.WriteLine("Invalid Input");
+                    break;
+
+            }
         }
 
         static void addaddress()
