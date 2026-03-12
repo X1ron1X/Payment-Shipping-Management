@@ -1,9 +1,16 @@
-﻿using System;
+﻿using address;
+using AppService;
+using DataService;
+using System;
+using System.Security.Principal;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Payment_Shipping_System
 {
     internal class Program
     {
+        static Service App = new Service();
+        static Data Data = new Data();
         static void Main(string[] args)
         {
 
@@ -37,12 +44,12 @@ namespace Payment_Shipping_System
         static bool addchoice()
         {
 
-            Console.Write("Do You Want to Run the program(y/n): ");
+            Console.Write("Do You Want to Add a ADDRESS(y/n): ");
             bool chose = false;
             string choice = Console.ReadLine();
 
 
-            switch (choice == true)
+            switch (choice)
             {
 
                 case "y":
@@ -81,20 +88,19 @@ namespace Payment_Shipping_System
             Console.WriteLine("\nADDRESS\n");
             Console.Write("\nFull Name: ");
             string fname = Console.ReadLine();
+            Console.Write("\nFull ADDRESS\n(House No., Street, Barangay, City, Province, Region): ");
+            string add = Console.ReadLine();
             Console.Write("\nPhone Number: ");
             string pnum = Console.ReadLine();
-            Console.Write("\nRegion: ");
-            string reg = Console.ReadLine();
-            Console.Write("\nProvince: ");
-            string prov = Console.ReadLine();
-            Console.Write("\nCity: ");
-            string city = Console.ReadLine();
-            Console.Write("\nBarangay: ");
-            string brgy = Console.ReadLine();
             Console.Write("\nPostal Code: ");
             string pcode = Console.ReadLine();
-            Console.Write("\nStreet Name, Building, House No.: ");
-            string sbh = Console.ReadLine();
+
+            ADD newAdd = new ADD { Name = fname, Address = add, PNumber = pnum, Pcode = pcode };
+
+            Data.Add(newAdd);
+
+            Console.WriteLine($"Successfully added user {newAdd.Name}");
+
 
         }
     }
