@@ -73,10 +73,10 @@ namespace DataService
             var insertStatement = "INSERT INTO Address VALUES (@Name, @Address, @PNumber, @Pcode)";
             SqlCommand insertCommand = new SqlCommand(insertStatement, sqlConnection);
 
-            insertCommand.Parameters.Add("@Name", SqlDbType.NVarChar).Value = add.Name;
-            insertCommand.Parameters.Add("@Address", SqlDbType.NVarChar).Value = add.Address;
-            insertCommand.Parameters.Add("@PNumber", SqlDbType.NVarChar).Value = add.PNumber;
-            insertCommand.Parameters.Add("@Pcode", SqlDbType.NVarChar).Value = add.Pcode;
+            insertCommand.Parameters.AddWithValue("@Name", add.Name);
+            insertCommand.Parameters.AddWithValue("@Address", add.Address);
+            insertCommand.Parameters.AddWithValue("@PNumber", add.PNumber);
+            insertCommand.Parameters.AddWithValue("@Pcode", add.Pcode);
             sqlConnection.Open();
             insertCommand.ExecuteNonQuery();
             sqlConnection.Close();
@@ -84,13 +84,13 @@ namespace DataService
 
         public void InsertCard(Card card)
         {
-            var insertStatement = "INSERT INTO Address VALUES (@Name, @CNumber, @EDate, @CVV)";
+            var insertStatement = "INSERT INTO Card VALUES (@Name, @CNumber, @EDate, @CVV)";
             SqlCommand insertCommand = new SqlCommand(insertStatement, sqlConnection);
 
-            insertCommand.Parameters.Add("@Name", SqlDbType.NVarChar).Value = card.Name;
-            insertCommand.Parameters.Add("@CNumber", SqlDbType.NVarChar).Value = card.CNumber;
-            insertCommand.Parameters.Add("@EDate", SqlDbType.NVarChar).Value = card.EDate;
-            insertCommand.Parameters.Add("@CVV", SqlDbType.NVarChar).Value = card.CVV;
+            insertCommand.Parameters.AddWithValue("@Name", card.Name);
+            insertCommand.Parameters.AddWithValue("@CNumber", card.CNumber);
+            insertCommand.Parameters.AddWithValue("@EDate", card.EDate);
+            insertCommand.Parameters.AddWithValue("@CVV", card.CVV);
             sqlConnection.Open();
             insertCommand.ExecuteNonQuery();
             sqlConnection.Close();
@@ -99,12 +99,12 @@ namespace DataService
 
         public void InsertBank(Bank bank)
         {
-            var insertStatement = "INSERT INTO Address VALUES (@Holder, @BNumber, @BName)";
+            var insertStatement = "INSERT INTO Bank VALUES (@Holder, @BNumber, @BName)";
             SqlCommand insertCommand = new SqlCommand(insertStatement, sqlConnection);
 
-            insertCommand.Parameters.Add("@Holder", SqlDbType.NVarChar).Value = bank.Holder;
-            insertCommand.Parameters.Add("@BNumber", SqlDbType.NVarChar).Value = bank.BNumber;
-            insertCommand.Parameters.Add("@BName", SqlDbType.NVarChar).Value = bank.BName;
+            insertCommand.Parameters.AddWithValue("@Holder", bank.Holder);
+            insertCommand.Parameters.AddWithValue("@BNumber", bank.BNumber);
+            insertCommand.Parameters.AddWithValue("@BName", bank.BName);
             sqlConnection.Open();
             insertCommand.ExecuteNonQuery();
             sqlConnection.Close();
@@ -113,18 +113,18 @@ namespace DataService
 
         public void InsertGcash(Gcash gcash)
         {
-            var insertStatement = "INSERT INTO Address VALUES (@Name, @GNumber)";
+            var insertStatement = "INSERT INTO  VALUES (@Name, @GNumber)";
             SqlCommand insertCommand = new SqlCommand(insertStatement, sqlConnection);
 
-            insertCommand.Parameters.Add("@Name", SqlDbType.NVarChar).Value = gcash.Name;
-            insertCommand.Parameters.Add("@GNumber", SqlDbType.NVarChar).Value = gcash.GNumber;
+            insertCommand.Parameters.AddWithValue("@Name", gcash.Name);
+            insertCommand.Parameters.AddWithValue("@GNumber", gcash.GNumber);
             sqlConnection.Open();
             insertCommand.ExecuteNonQuery();
             sqlConnection.Close();
 
         }
 
-        
+
 
         public List<ADD> GetAddresses()
         {
