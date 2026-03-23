@@ -11,7 +11,7 @@ namespace Payment_Shipping_System
     {
 
         static Service App = new Service();
-        static Data Data = new Data();
+        static DBData dbData = new DBData();
         static void Main(string[] args)
         {
 
@@ -95,16 +95,16 @@ namespace Payment_Shipping_System
                     break;
                 case "2":
                     Console.WriteLine("\nBANK ACCOUNT\n");
-                    Console.Write("\nBank Name: ");
-                    string bname = Console.ReadLine();
-                    Console.Write("\nAccount Number: ");
-                    string anum = Console.ReadLine();
                     Console.Write("\nAccount Holder Name: ");
                     string ahname = Console.ReadLine();
+                    Console.Write("\nAccount Number: ");
+                    string anum = Console.ReadLine();
+                    Console.Write("\nBank Name: ");
+                    string bname = Console.ReadLine();
                     
-                    Bank newBank = new Bank { Name = bname, BNumber = anum, Holder = ahname };
+                    Bank newBank = new Bank { Holder = ahname, BNumber = anum, BName = bname };
                     App.AddPayment(newBank);
-                    Console.WriteLine($"Successfully added user {newBank.Name}");
+                    Console.WriteLine($"Successfully added user {newBank.Holder }");
                     break;
                 case "3":
                     Console.WriteLine("\nGCASH\n");
@@ -138,7 +138,7 @@ namespace Payment_Shipping_System
 
             ADD newAdd = new ADD { Name = fname, Address = add, PNumber = pnum, Pcode = pcode };
 
-            Data.Add(newAdd);
+            App.Address(newAdd);
 
             Console.WriteLine($"Successfully added user {newAdd.Name}");
 

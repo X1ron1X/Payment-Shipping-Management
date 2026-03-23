@@ -1,69 +1,63 @@
-﻿using System.Security.Principal;
-using Models;
+﻿using Models;
+using Microsoft.Data.SqlClient;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace DataService
 {
     public class Data
     {
-        public List<ADD> dummyAdd = new List<ADD>();
-        public List<Card> dummyCard = new List<Card>();
-        public List<Bank> dummyBank = new List<Bank>();
-        public List<Gcash> dummyGcash = new List<Gcash>();
-
-        public Data()
-        {
-            ADD address = new ADD { Name = "Ronelito", Address = "1556, Kaimito st., brgy. San Antonio, Binan City, Laguna, Calabarzon", PNumber = "09XXXXXXXXX", Pcode = "4024" };
-            Card card = new Card { Name = "Ronelito T. Llaguno", CNumber = "123456789", EDate = "2030", CVV = "1234" };
-            Bank bank = new Bank { Name = "BDO", BNumber = "94725739206", Holder = "Ronelito T. Llaguno" };
-            Gcash gcash = new Gcash { Name = "Ronelito T. Llaguno", GNumber = "09XXXXXXXXX" };
-
-            dummyAdd.Add(address);
-            dummyCard.Add(card);
-            dummyBank.Add(bank);
-            dummyGcash.Add(gcash);
+        IData _db;
+        public Data(IData iData) {
+            _db = iData;
         }
 
-        public void Add(ADD add)
+        public void AddAddress(ADD add)
         {
-            dummyAdd.Add(add);
+            _db.InsertAddress(add);
         }
 
         public void AddCard(Card card)
         {
-            dummyCard.Add(card);
+            _db.InsertCard(card);
         }
 
         public void AddBank(Bank bank)
         {
-            dummyBank.Add(bank);
+            _db.InsertBank(bank);
         }
 
         public void AddGcash(Gcash gcash)
         {
-            dummyGcash.Add(gcash);
+            _db.InsertGcash(gcash);
         }
-
 
         public List<ADD> GetAddress()
         {
-            return dummyAdd;
+            return _db.GetAddresses();
         }
 
         public List<Card> GetCards()
         {
-            return dummyCard;
+            return _db.GetCards();
         }
 
         public List<Bank> GetBanks()
         {
-            return dummyBank;
+            return _db.GetBanks();
         }
 
         public List<Gcash> GetGcash()
         {
-            return dummyGcash;
+            return _db.GetGcash();
         }
 
-
+        public void Add(ADD add)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

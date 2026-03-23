@@ -12,10 +12,12 @@ namespace AppService
 {
     public class Service
     {
-        Data Data = new Data();
+        Data data = new Data(new DBData());
+        // InMemoData inmemodata= new InMemoData();
 
-        
-        
+        //public Service() { 
+        //DBData dbdata = new DBData();
+        //} 
 
         public bool Address(ADD newadd)
         {
@@ -26,7 +28,7 @@ namespace AppService
                 PNumber = newadd.PNumber,
                 Pcode = newadd.Pcode
             };
-            Data.Add(newadd);
+            data.AddAddress(newadd);
             return true;
 
         }
@@ -36,21 +38,21 @@ namespace AppService
         {
             if (card == null) return false;
             
-            Data.AddCard(card);
+            data.AddCard(card);
             return true;
         }
 
         public bool AddPayment(Bank bank)
         {
             if (bank == null) return false;
-            Data.AddBank(bank);
+            data.AddBank(bank);
             return true;
         }
 
         public bool AddPayment(Gcash gcash)
         {
             if (gcash == null) return false;
-            Data.AddGcash(gcash);
+            data.AddGcash(gcash);
             return true;
         }
 

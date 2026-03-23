@@ -20,9 +20,9 @@
 
     public class Bank
     {
-        public string Name { get; set; }
-        public string BNumber { get; set; }
         public string Holder { get; set; }
+        public string BNumber { get; set; }
+        public string BName { get; set; }
 
     }
 
