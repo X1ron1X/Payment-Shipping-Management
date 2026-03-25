@@ -33,11 +33,11 @@ namespace AppService
 
         }
 
-        
+
         public bool AddPayment(Card card)
         {
             if (card == null) return false;
-            
+
             data.AddCard(card);
             return true;
         }
@@ -54,6 +54,26 @@ namespace AppService
             if (gcash == null) return false;
             data.AddGcash(gcash);
             return true;
+        }
+
+        public List<ADD> GetAddresses()
+        {
+            return data.GetAddress();
+        }
+
+        public List<Card> GetCards()
+        {
+            return data.GetCards();
+        }
+
+        public List<Bank> GetBanks()
+        {
+            return data.GetBanks();
+        }
+
+        public List<Gcash> GetGcash()
+        {
+            return data.GetGcash();
         }
 
     }

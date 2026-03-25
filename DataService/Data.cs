@@ -11,7 +11,8 @@ namespace DataService
     public class Data
     {
         IData _db;
-        public Data(IData iData) {
+        public Data(IData iData)
+        {
             _db = iData;
         }
 

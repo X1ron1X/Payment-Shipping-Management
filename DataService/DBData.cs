@@ -8,120 +8,138 @@ namespace DataService
 {
     public class DBData : IData
     {
-        private string connectionString = @"Server=localhost\SQLEXPRESS;Database=dbpayship;Trusted_Connection=True;TrustServerCertificate=True;";
+        private readonly string connectionString =
+                @"Server=localhost\SQLEXPRESS;Database=dbpayship;Trusted_Connection=True;TrustServerCertificate=True;";
 
         private SqlConnection sqlConnection;
 
         public DBData()
         {
             sqlConnection = new SqlConnection(connectionString);
+            AddSeeds();
 
-            
-            AddSeeds(); 
         }
 
-        private void AddSeeds() {
-            var existADD = GetAddresses();
-            if (existADD.Count == 0) 
+
+        public void InsertAddress(ADD add)
+        {
+            string query = @"INSERT INTO Address (Name, Address, Phone_Number, Postal_Code)
+                                 VALUES (@Name, @Address, @PNumber, @Pcode)";
+            SqlCommand cmd = new SqlCommand(query, sqlConnection);
             {
-                ADD add = new ADD 
+                cmd.Parameters.AddWithValue("@Name", add.Name);
+                cmd.Parameters.AddWithValue("@Address", add.Address);
+                cmd.Parameters.AddWithValue("@PNumber", add.PNumber);
+                cmd.Parameters.AddWithValue("@Pcode", add.Pcode);
+                sqlConnection.Open();
+                cmd.ExecuteNonQuery();
+                sqlConnection.Close();
+            }
+
+        }
+
+
+
+        public void InsertCard(Card card)
+        {
+            string query = @"INSERT INTO Card (Name, Card_Number, Expiration, cvv)
+                                 VALUES (@Name, @CNumber, @EDate, @CVV)";
+            SqlCommand cmd = new SqlCommand(query, sqlConnection);
+            {
+                cmd.Parameters.AddWithValue("@Name", card.Name);
+                cmd.Parameters.AddWithValue("@CNumber", card.CNumber);
+                cmd.Parameters.AddWithValue("@EDate", card.EDate);
+                cmd.Parameters.AddWithValue("@CVV", card.CVV);
+                sqlConnection.Open();
+                cmd.ExecuteNonQuery();
+                sqlConnection.Close();
+            }
+
+        }
+
+
+        public void InsertBank(Bank bank)
+        {
+            string query = @"INSERT INTO Bank (HOLDER, Bank_Number, Bank_Name)
+                                 VALUES (@Holder, @BNumber, @BName)";
+            SqlCommand cmd = new SqlCommand(query, sqlConnection);
+            {
+                cmd.Parameters.AddWithValue("@Holder", bank.Holder);
+                cmd.Parameters.AddWithValue("@BNumber", bank.BNumber);
+                cmd.Parameters.AddWithValue("@BName", bank.BName);
+                sqlConnection.Open();
+                cmd.ExecuteNonQuery();
+                sqlConnection.Close();
+            }
+
+        }
+
+        public void InsertGcash(Gcash gcash)
+        {
+            string query = @"INSERT INTO Gcash (Name, Gcash_Number)
+                                 VALUES (@Name, @GNumber)";
+            SqlCommand cmd = new SqlCommand(query, sqlConnection);
+            {
+                cmd.Parameters.AddWithValue("@Name", gcash.Name);
+                cmd.Parameters.AddWithValue("@GNumber", gcash.GNumber);
+                sqlConnection.Open();
+                cmd.ExecuteNonQuery();
+                sqlConnection.Close();
+            }
+
+        }
+
+
+        public void AddSeeds()
+        {
+            var exAdd = GetAddresses();
+            if (exAdd.Count == 0)
+            {
+                ADD a = new ADD
                 {
                     Name = "Ronelito T. Llaguno",
                     Address = "1556, Kaimito st., brgy. San Antonio, Binan City, Laguna, Calabarzon",
                     PNumber = "09914687722",
                     Pcode = "4024"
                 };
-                InsertAddress(add);
+                InsertAddress(a);
             }
-            var existCard = GetCards();
-            if (existADD.Count == 0)
+
+            var exCard = GetCards();
+            if (exCard.Count == 0)
             {
-                Card card = new Card
+                Card c = new Card
                 {
                     Name = "Ronelito T. Llaguno",
                     CNumber = "123456789",
                     EDate = "2030",
                     CVV = "1234"
                 };
-                InsertCard(card);
+                InsertCard(c);
             }
-            var existBank = GetBanks();
-            if (existADD.Count == 0)
+
+            var exBank = GetBanks();
+            if (exBank.Count == 0)
             {
-                Bank bank = new Bank
+                Bank b = new Bank
                 {
                     Holder = "Ronelito T. Llaguno",
-                    BNumber = "94725739206",
+                    BNumber = "123456789",
                     BName = "BDO"
                 };
-                InsertBank(bank);
+                InsertBank(b);
             }
-            var existGcash = GetGcash();
-            if (existADD.Count == 0)
+
+            var exGcash = GetGcash();
+            if (exGcash.Count == 0)
             {
-                Gcash gcash = new Gcash
+                Gcash g = new Gcash
                 {
                     Name = "Ronelito T. Llaguno",
-                    GNumber = "09914687722"
+                    GNumber = "123456789"
                 };
-                InsertGcash(gcash);
+                InsertGcash(g);
             }
-        }
-
-        public void InsertAddress(ADD add)
-        {
-            var insertStatement = "INSERT INTO Address VALUES (@Name, @Address, @PNumber, @Pcode)";
-            SqlCommand insertCommand = new SqlCommand(insertStatement, sqlConnection);
-
-            insertCommand.Parameters.AddWithValue("@Name", add.Name);
-            insertCommand.Parameters.AddWithValue("@Address", add.Address);
-            insertCommand.Parameters.AddWithValue("@PNumber", add.PNumber);
-            insertCommand.Parameters.AddWithValue("@Pcode", add.Pcode);
-            sqlConnection.Open();
-            insertCommand.ExecuteNonQuery();
-            sqlConnection.Close();
-        }
-
-        public void InsertCard(Card card)
-        {
-            var insertStatement = "INSERT INTO Card VALUES (@Name, @CNumber, @EDate, @CVV)";
-            SqlCommand insertCommand = new SqlCommand(insertStatement, sqlConnection);
-
-            insertCommand.Parameters.AddWithValue("@Name", card.Name);
-            insertCommand.Parameters.AddWithValue("@CNumber", card.CNumber);
-            insertCommand.Parameters.AddWithValue("@EDate", card.EDate);
-            insertCommand.Parameters.AddWithValue("@CVV", card.CVV);
-            sqlConnection.Open();
-            insertCommand.ExecuteNonQuery();
-            sqlConnection.Close();
-
-        }
-
-        public void InsertBank(Bank bank)
-        {
-            var insertStatement = "INSERT INTO Bank VALUES (@Holder, @BNumber, @BName)";
-            SqlCommand insertCommand = new SqlCommand(insertStatement, sqlConnection);
-
-            insertCommand.Parameters.AddWithValue("@Holder", bank.Holder);
-            insertCommand.Parameters.AddWithValue("@BNumber", bank.BNumber);
-            insertCommand.Parameters.AddWithValue("@BName", bank.BName);
-            sqlConnection.Open();
-            insertCommand.ExecuteNonQuery();
-            sqlConnection.Close();
-
-        }
-
-        public void InsertGcash(Gcash gcash)
-        {
-            var insertStatement = "INSERT INTO  VALUES (@Name, @GNumber)";
-            SqlCommand insertCommand = new SqlCommand(insertStatement, sqlConnection);
-
-            insertCommand.Parameters.AddWithValue("@Name", gcash.Name);
-            insertCommand.Parameters.AddWithValue("@GNumber", gcash.GNumber);
-            sqlConnection.Open();
-            insertCommand.ExecuteNonQuery();
-            sqlConnection.Close();
-
         }
 
 
@@ -140,14 +158,14 @@ namespace DataService
             {
                 add.Add(new ADD
                 {
-                    Name = reader["Name"]?.ToString(),
-                    Address = reader["Address"]?.ToString(),
-                    PNumber = reader["PNumber"]?.ToString(),
-                    Pcode = reader["Pcode"]?.ToString()
+                    Name = reader["Name"].ToString(),
+                    Address = reader["Address"].ToString(),
+                    PNumber = reader["Phone_Number"].ToString(),
+                    Pcode = reader["Postal_Code"].ToString()
                 });
             }
-            
 
+            sqlConnection.Close();
             return add;
         }
 
@@ -165,13 +183,14 @@ namespace DataService
             {
                 card.Add(new Card
                 {
-                    Name = reader["Name"]?.ToString(),
-                    CNumber = reader["CNumber"]?.ToString(),
-                    EDate = reader["EDate"]?.ToString(),
-                    CVV = reader["CVV"]?.ToString()
+                    Name = reader["Name"].ToString(),
+                    CNumber = reader["Card_Number"].ToString(),
+                    EDate = reader["Expiration"].ToString(),
+                    CVV = reader["cvv"].ToString()
                 });
             }
 
+            sqlConnection.Close();
             return card;
         }
 
@@ -189,12 +208,13 @@ namespace DataService
             {
                 bank.Add(new Bank
                 {
-                    Holder = reader["Holder"]?.ToString(),
-                    BNumber = reader["BNumber"]?.ToString(),
-                    BName = reader["BName"]?.ToString()
+                    Holder = reader["HOLDER"].ToString(),
+                    BNumber = reader["Bank_Name"].ToString(),
+                    BName = reader["Bank_Name"].ToString()
                 });
             }
 
+            sqlConnection.Close();
             return bank;
         }
 
@@ -212,37 +232,14 @@ namespace DataService
             {
                 gcash.Add(new Gcash
                 {
-                    Name = reader["Name"]?.ToString(),
-                    GNumber = reader["GNumber"]?.ToString()
+                    Name = reader["Name"].ToString(),
+                    GNumber = reader["Gcash_Number"].ToString()
                 });
             }
 
+            sqlConnection.Close();
             return gcash;
         }
 
-        public void Add(ADD add)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddCard(Card card)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddBank(Bank bank)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddGcash(Gcash gcash)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<ADD> GetAddress()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
