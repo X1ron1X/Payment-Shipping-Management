@@ -9,13 +9,15 @@ namespace DataService
 {
      public interface IData
         {
-            void InsertAddress(ADD add);
-            void InsertCard(Card card);
-            void InsertBank(Bank bank);
-            void InsertGcash(Gcash gcash);
-            List<ADD> GetAddresses();
-            List<Card> GetCards();
-            List<Bank> GetBanks();
-            List<Gcash> GetGcash();
+        void InsertAddress(ADD add);
+        ADD? GetById(Guid aid);
+        List<ADD> GetAddresses();
+        void UpAdd(ADD add);
+        void InsertCard(Card card);
+        void InsertBank(Bank bank);
+        void InsertGcash(Gcash gcash);
+        List<Card> GetCards();
+        List<Bank> GetBanks();
+        List<Gcash> GetGcash();
         }
 }

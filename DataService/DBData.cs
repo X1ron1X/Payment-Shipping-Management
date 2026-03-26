@@ -23,10 +23,12 @@ namespace DataService
 
         public void InsertAddress(ADD add)
         {
-            string query = @"INSERT INTO Address (Name, Address, Phone_Number, Postal_Code)
-                                 VALUES (@Name, @Address, @PNumber, @Pcode)";
+            string query = @"INSERT INTO Address (ID, Name, Address, Phone_Number, Postal_Code)
+                                 VALUES (@Id, @Name, @Address, @PNumber, @Pcode)";
             SqlCommand cmd = new SqlCommand(query, sqlConnection);
             {
+                add.AID = Guid.NewGuid();
+                cmd.Parameters.AddWithValue("@Id", add.AID);
                 cmd.Parameters.AddWithValue("@Name", add.Name);
                 cmd.Parameters.AddWithValue("@Address", add.Address);
                 cmd.Parameters.AddWithValue("@PNumber", add.PNumber);
@@ -97,6 +99,7 @@ namespace DataService
             {
                 ADD a = new ADD
                 {
+                    AID = Guid.NewGuid(),
                     Name = "Ronelito T. Llaguno",
                     Address = "1556, Kaimito st., brgy. San Antonio, Binan City, Laguna, Calabarzon",
                     PNumber = "09914687722",
@@ -146,27 +149,30 @@ namespace DataService
 
         public List<ADD> GetAddresses()
         {
-            var add = new List<ADD>();
+            string selectStatement = "SELECT ID, Name, Address, Phone_Number, Postal_Code FROM Address";
 
-            var selectStatement = "SELECT Name, Address, Phone_Number, Postal_Code FROM Address";
-            SqlCommand command = new SqlCommand(selectStatement, sqlConnection);
+            SqlCommand cmd = new SqlCommand(selectStatement, sqlConnection);
 
             sqlConnection.Open();
-            SqlDataReader reader = command.ExecuteReader();
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            var list = new List<ADD>();
 
             while (reader.Read())
             {
-                add.Add(new ADD
-                {
-                    Name = reader["Name"].ToString(),
-                    Address = reader["Address"].ToString(),
-                    PNumber = reader["Phone_Number"].ToString(),
-                    Pcode = reader["Postal_Code"].ToString()
-                });
+                ADD add = new ADD();
+
+                add.AID = Guid.Parse(reader["ID"].ToString());
+                add.Name = reader["Name"].ToString();
+                add.Address = reader["Address"].ToString();
+                add.PNumber = reader["Phone_Number"].ToString();
+                add.Pcode = reader["Postal_Code"].ToString();
+
+                list.Add(add);
             }
 
             sqlConnection.Close();
-            return add;
+            return list;
         }
 
         public List<Card> GetCards()
@@ -241,5 +247,27 @@ namespace DataService
             return gcash;
         }
 
+        public ADD? GetById(Guid id)
+        {
+            return GetAddresses().FirstOrDefault(t => t.AID == id);
+        }
+
+        public void UpAdd(ADD add)
+        {
+            sqlConnection.Open();
+
+            var updateStatement = @"UPDATE Address SET Name=@Name, Address=@Address, Phone_Number=@PNumber, Postal_Code=@Pcode WHERE ID=@id";
+
+            SqlCommand cmd = new SqlCommand(updateStatement, sqlConnection);
+
+            cmd.Parameters.AddWithValue("@Name", add.Name);
+            cmd.Parameters.AddWithValue("@Address", add.Address);
+            cmd.Parameters.AddWithValue("@PNumber", add.PNumber);
+            cmd.Parameters.AddWithValue("@Pcode", add.Pcode);
+            cmd.Parameters.AddWithValue("@Id", add.AID);
+
+            cmd.ExecuteNonQuery();
+            sqlConnection.Close();
+        }
     }
 }

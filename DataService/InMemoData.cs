@@ -70,6 +70,14 @@ namespace DataService
             return dummyGcash;
         }
 
-       
+        public ADD? GetById(Guid aid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpAdd(ADD add)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

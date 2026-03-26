@@ -36,6 +36,11 @@ namespace DataService
             _db.InsertGcash(gcash);
         }
 
+        public ADD? GetById(Guid aid)
+        {
+            return _db.GetById(aid);
+        }
+
         public List<ADD> GetAddress()
         {
             return _db.GetAddresses();
@@ -56,9 +61,9 @@ namespace DataService
             return _db.GetGcash();
         }
 
-        public void Add(ADD add)
+        public void UpAdd(ADD add)
         {
-            throw new NotImplementedException();
+            _db.UpAdd(add);
         }
     }
 }

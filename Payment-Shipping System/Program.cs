@@ -19,9 +19,9 @@ namespace Payment_Shipping_System
 
             while (chose)
             {
-                Console.WriteLine("[1] Payment Methods\n[2] Address\n[3] View");
+                Console.WriteLine("[1] Payment Methods\n[2] Address\n[3] View\n[4] Update");
 
-                Console.Write("\nEnter(1/2): ");
+                Console.Write("\nEnter(1-4): ");
                 string opt1 = Console.ReadLine();
 
                 if (opt1 == "1")
@@ -39,11 +39,37 @@ namespace Payment_Shipping_System
                     viewchoice();
                     chose = addchoice();
                 }
+                else if (opt1 == "4")
+                {
+                    updatechoice();
+                    chose = addchoice();
+                }
                 else
                 {
                     Console.WriteLine("Invalid Input");
                 }
 
+            }
+        }
+
+        static void updatechoice()
+        {
+            Console.WriteLine("[1] Update Payment Methods\n[2] Update Address");
+            Console.Write("\nEnter(1/2): ");
+            string opt1 = Console.ReadLine();
+            if (opt1 == "1")
+            {
+                Console.WriteLine("\nPAYMENT METHODS\n");
+                //UpdatePayment();
+            }
+            else if (opt1 == "2")
+            {
+                Console.WriteLine("\nADDRESS\n");
+                UpdateAddress();
+            }
+            else
+            {
+                Console.WriteLine("Invalid Input");
             }
         }
 
@@ -248,6 +274,51 @@ namespace Payment_Shipping_System
                 Console.WriteLine($"{n}. \nName: {Gcash.Name}\nGcash Number: {Gcash.GNumber}");
                 n++;
             }
+        }
+
+        static void UpdateAddress()
+        {
+            var addresses = App.GetAddresses();
+
+            if (addresses.Count == 0)
+            {
+                Console.WriteLine("No Address to update.");
+                return;
+            }
+
+            Console.WriteLine("\nSelect Address to Update:\n");
+
+            for (int i = 0; i < addresses.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {addresses[i].Name}");
+            }
+
+            Console.Write("\nEnter number: ");
+            int choice = Convert.ToInt32(Console.ReadLine());
+
+            if (choice < 1 || choice > addresses.Count)
+            {
+                Console.WriteLine("Invalid selection.");
+                return;
+            }
+            var selected = addresses[choice - 1];
+
+            Console.WriteLine("\nEnter new details:\n");
+
+            Console.Write("New Name: ");
+            selected.Name = Console.ReadLine();
+
+            Console.Write("New Address: ");
+            selected.Address = Console.ReadLine();
+
+            Console.Write("New Phone Number: ");
+            selected.PNumber = Console.ReadLine();
+
+            Console.Write("New Postal Code: ");
+            selected.Pcode = Console.ReadLine();
+            App.UpAdd(selected);
+
+            Console.WriteLine("\nAddress updated successfully!");
         }
     }
 }

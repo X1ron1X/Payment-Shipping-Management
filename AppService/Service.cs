@@ -13,7 +13,7 @@ namespace AppService
     public class Service
     {
         Data data = new Data(new DBData());
-        // InMemoData inmemodata= new InMemoData();
+        InMemoData inmemodata= new InMemoData();
 
         //public Service() { 
         //DBData dbdata = new DBData();
@@ -23,11 +23,13 @@ namespace AppService
         {
             var add = new ADD
             {
+                AID = Guid.NewGuid(),
                 Name = newadd.Name,
                 Address = newadd.Address,
                 PNumber = newadd.PNumber,
                 Pcode = newadd.Pcode
             };
+            //inmemodata.InsertAddress(add);
             data.AddAddress(newadd);
             return true;
 
@@ -37,7 +39,7 @@ namespace AppService
         public bool AddPayment(Card card)
         {
             if (card == null) return false;
-
+            //inmemodata.InsertCard(add);
             data.AddCard(card);
             return true;
         }
@@ -45,6 +47,7 @@ namespace AppService
         public bool AddPayment(Bank bank)
         {
             if (bank == null) return false;
+            //inmemodata.InsertBank(add);
             data.AddBank(bank);
             return true;
         }
@@ -52,27 +55,40 @@ namespace AppService
         public bool AddPayment(Gcash gcash)
         {
             if (gcash == null) return false;
+            //inmemodata.InsertGcash(add);
             data.AddGcash(gcash);
+            return true;
+        }
+
+        public bool UpAdd(ADD upAdd)
+        {
+            if (upAdd == null) return false;
+
+            data.UpAdd(upAdd);
             return true;
         }
 
         public List<ADD> GetAddresses()
         {
+            //return inmemodata.GetAddresses();
             return data.GetAddress();
         }
 
         public List<Card> GetCards()
         {
+            //return inmemodata.GetCards();
             return data.GetCards();
         }
 
         public List<Bank> GetBanks()
         {
+            //return inmemodata.GetBanks();
             return data.GetBanks();
         }
 
         public List<Gcash> GetGcash()
         {
+            //return inmemodata.GetGcash();
             return data.GetGcash();
         }
 
