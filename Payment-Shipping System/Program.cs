@@ -15,40 +15,56 @@ namespace Payment_Shipping_System
         static void Main(string[] args)
         {
 
-            bool chose = addchoice();
+            bool chose = runchoice();
 
             while (chose)
             {
-                Console.WriteLine("[1] Payment Methods\n[2] Address\n[3] View\n[4] Update");
+                Console.WriteLine("[1] Add\n[2] View\n[3] Update");
 
                 Console.Write("\nEnter(1-4): ");
                 string opt1 = Console.ReadLine();
 
                 if (opt1 == "1")
                 {
-                    addpayment();
-                    chose = addchoice();
+                    addchoice();
+                    chose = runchoice();
                 }
                 else if (opt1 == "2")
                 {
-                    addaddress();
-                    chose = addchoice();
+                    viewchoice();
+                    chose = runchoice();
                 }
                 else if (opt1 == "3")
                 {
-                    viewchoice();
-                    chose = addchoice();
-                }
-                else if (opt1 == "4")
-                {
                     updatechoice();
-                    chose = addchoice();
+                    chose = runchoice();
                 }
                 else
                 {
                     Console.WriteLine("Invalid Input");
                 }
 
+            }
+        }
+
+        static void addchoice()
+        {
+            Console.WriteLine("[1] Add Payment Methods\n[2] Add Address");
+            Console.Write("\nEnter(1/2): ");
+            string opt1 = Console.ReadLine();
+            if (opt1 == "1")
+            {
+                Console.WriteLine("\nPAYMENT METHODS\n");
+                addpayment();
+            }
+            else if (opt1 == "2")
+            {
+                Console.WriteLine("\nADDRESS\n");
+                addaddress();
+            }
+            else
+            {
+                Console.WriteLine("Invalid Input");
             }
         }
 
@@ -60,7 +76,7 @@ namespace Payment_Shipping_System
             if (opt1 == "1")
             {
                 Console.WriteLine("\nPAYMENT METHODS\n");
-                //UpdatePayment();
+                UpdatePayment();
             }
             else if (opt1 == "2")
             {
@@ -96,7 +112,7 @@ namespace Payment_Shipping_System
             }
         }
 
-        static bool addchoice()
+        static bool runchoice()
         {
 
             Console.Write("Do You Want to Run the Program(y/n): ");
@@ -276,6 +292,31 @@ namespace Payment_Shipping_System
             }
         }
 
+        static void UpdatePayment()
+        {
+            Console.WriteLine("\nPAYMENT METHODS\n[1] Card\n[2] Bank Account\n[3] Gcash");
+            Console.Write("\nEnter (1-3): ");
+            string PM = Console.ReadLine();
+            switch (PM)
+            {
+                case "1":
+                    Console.WriteLine("\nCARD\n");
+                    UpdateCard();
+                    break;
+                case "2":
+                    Console.WriteLine("\nBANK ACCOUNT\n");
+                    UpdateBank();
+                    break;
+                case "3":
+                    Console.WriteLine("\nGCASH\n");
+                    UpdateGcash();
+                    break;
+                default:
+                    Console.WriteLine("Invalid Input");
+                    break;
+            }
+        }
+
         static void UpdateAddress()
         {
             var addresses = App.GetAddresses();
@@ -319,6 +360,132 @@ namespace Payment_Shipping_System
             App.UpAdd(selected);
 
             Console.WriteLine("\nAddress updated successfully!");
+        }
+
+        static void UpdateCard()
+        {
+            var cards = App.GetCards();
+
+            if (cards.Count == 0)
+            {
+                Console.WriteLine("No Card to update.");
+                return;
+            }
+
+            Console.WriteLine("\nSelect Card to Update:\n");
+
+            for (int i = 0; i < cards.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {cards[i].Name}");
+            }
+
+            Console.Write("\nEnter number: ");
+            int choice = Convert.ToInt32(Console.ReadLine());
+
+            if (choice < 1 || choice > cards.Count)
+            {
+                Console.WriteLine("Invalid selection.");
+                return;
+            }
+            var selected = cards[choice - 1];
+
+            Console.WriteLine("\nEnter new details:\n");
+
+            Console.Write("New Name: ");
+            selected.Name = Console.ReadLine();
+
+            Console.Write("New Card Number: ");
+            selected.CNumber = Console.ReadLine();
+
+            Console.Write("New Expiration: ");
+            selected.EDate = Console.ReadLine();
+
+            Console.Write("New CVV: ");
+            selected.CVV = Console.ReadLine();
+            App.UpCard(selected);
+
+            Console.WriteLine("\nCard updated successfully!");
+        }
+
+        static void UpdateBank()
+        {
+            var banks = App.GetBanks();
+
+            if (banks.Count == 0)
+            {
+                Console.WriteLine("No Bank to update.");
+                return;
+            }
+
+            Console.WriteLine("\nSelect Bank to Update:\n");
+
+            for (int i = 0; i < banks.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {banks[i].Holder}");
+            }
+
+            Console.Write("\nEnter number: ");
+            int choice = Convert.ToInt32(Console.ReadLine());
+
+            if (choice < 1 || choice > banks.Count)
+            {
+                Console.WriteLine("Invalid selection.");
+                return;
+            }
+            var selected = banks[choice - 1];
+
+            Console.WriteLine("\nEnter new details:\n");
+
+            Console.Write("New Name: ");
+            selected.Holder = Console.ReadLine();
+
+            Console.Write("New Bank Number: ");
+            selected.BNumber = Console.ReadLine();
+
+            Console.Write("New Bank Name: ");
+            selected.BName = Console.ReadLine();
+            App.UpBank(selected);
+
+            Console.WriteLine("\nBank updated successfully!");
+        }
+
+        static void UpdateGcash()
+        {
+            var gcash = App.GetGcash();
+
+            if (gcash.Count == 0)
+            {
+                Console.WriteLine("No Gcash to update.");
+                return;
+            }
+
+            Console.WriteLine("\nSelect Gcash to Update:\n");
+
+            for (int i = 0; i < gcash.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {gcash[i].Name}");
+            }
+
+            Console.Write("\nEnter number: ");
+            int choice = Convert.ToInt32(Console.ReadLine());
+
+            if (choice < 1 || choice > gcash.Count)
+            {
+                Console.WriteLine("Invalid selection.");
+                return;
+            }
+            var selected = gcash[choice - 1];
+
+            Console.WriteLine("\nEnter new details:\n");
+
+            Console.Write("New Name: ");
+            selected.Name = Console.ReadLine();
+
+            Console.Write("New Gcash Number: ");
+            selected.GNumber = Console.ReadLine();
+            App.UpGcash(selected);
+
+            Console.WriteLine("\nGcash updated successfully!");
         }
     }
 }

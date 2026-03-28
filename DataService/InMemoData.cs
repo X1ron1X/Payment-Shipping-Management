@@ -1,11 +1,12 @@
-﻿using Models;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
-using System.Security.Principal;
+using static Microsoft.Data.SqlClient.Internal.SqlClientEventSource;
 
 namespace DataService
 {
@@ -49,6 +50,67 @@ namespace DataService
             dummyGcash.Add(gcash);
         }
 
+        public ADD? GetByaid(Guid aid)
+        {
+            return dummyAdd.FirstOrDefault(t => t.AID == aid);
+        }
+
+        public Card? GetBycid(Guid cid)
+        {
+            return dummyCard.FirstOrDefault(t => t.CID == cid);
+        }
+
+        public Bank? GetBybid(Guid bid)
+        {
+            return dummyBank.FirstOrDefault(t => t.BID == bid);
+        }
+
+        public Gcash? GetBygid(Guid gid)
+        {
+            return dummyGcash.FirstOrDefault(t => t.GID == gid);
+        }
+
+        public void UpAdd(ADD add)
+        {
+            var existing = GetByaid(add.AID);
+            if (existing != null)
+            {
+                existing.Name = add.Name;
+                existing.Address = add.Address;
+                existing.PNumber = add.PNumber;
+                existing.Pcode = add.Pcode;
+            }
+        }
+        public void UpCard(Card card)
+        {
+            var existing = GetBycid(card.CID);
+            if (existing != null)
+            {
+                existing.Name = card.Name;
+                existing.CNumber = card.CNumber;
+                existing.EDate = card.EDate;
+                existing.CVV = card.CVV;
+            }
+        }
+        public void UpBank(Bank bank)
+        {
+            var existing = GetBybid(bank.BID);
+            if (existing != null)
+            {
+                existing.Holder = bank.Holder;
+                existing.BNumber = bank.BNumber;
+                existing.BName = bank.BName;
+            }
+        }
+        public void UpGcash(Gcash gcash)
+        {
+            var existing = GetBygid(gcash.GID);
+            if (existing != null)
+            {
+                existing.Name = gcash.Name;
+                existing.GNumber = gcash.GNumber;
+            }
+        }
 
         public List<ADD> GetAddresses()
         {
@@ -68,16 +130,6 @@ namespace DataService
         public List<Gcash> GetGcash()
         {
             return dummyGcash;
-        }
-
-        public ADD? GetById(Guid aid)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpAdd(ADD add)
-        {
-            throw new NotImplementedException();
         }
     }
 }

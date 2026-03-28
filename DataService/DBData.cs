@@ -247,16 +247,31 @@ namespace DataService
             return gcash;
         }
 
-        public ADD? GetById(Guid id)
+        public ADD? GetByaid(Guid id)
         {
             return GetAddresses().FirstOrDefault(t => t.AID == id);
+        }
+
+        public Card? GetBycid(Guid id)
+        {
+            return GetCards().FirstOrDefault(t => t.CID == id);
+        }
+
+        public Bank? GetBybid(Guid id)
+        {
+            return GetBanks().FirstOrDefault(t => t.BID == id);
+        }
+
+        public Gcash? GetBygid(Guid id)
+        {
+            return GetGcash().FirstOrDefault(t => t.GID == id);
         }
 
         public void UpAdd(ADD add)
         {
             sqlConnection.Open();
 
-            var updateStatement = @"UPDATE Address SET Name=@Name, Address=@Address, Phone_Number=@PNumber, Postal_Code=@Pcode WHERE ID=@id";
+            var updateStatement = @"UPDATE Address SET Name=@Name, Address=@Address, Phone_Number=@PNumber, Postal_Code=@Pcode WHERE ID=@Id";
 
             SqlCommand cmd = new SqlCommand(updateStatement, sqlConnection);
 
@@ -265,6 +280,57 @@ namespace DataService
             cmd.Parameters.AddWithValue("@PNumber", add.PNumber);
             cmd.Parameters.AddWithValue("@Pcode", add.Pcode);
             cmd.Parameters.AddWithValue("@Id", add.AID);
+
+            cmd.ExecuteNonQuery();
+            sqlConnection.Close();
+        }
+
+        public void UpCard(Card card)
+        {
+            sqlConnection.Open();
+
+            var updateStatement = @"UPDATE Card SET Name=@Name, Card_Number=@CNumber, Expiration=@EDate, cvv=@CVV WHERE ID=@Id";
+
+            SqlCommand cmd = new SqlCommand(updateStatement, sqlConnection);
+
+            cmd.Parameters.AddWithValue("@Name", card.Name);
+            cmd.Parameters.AddWithValue("@CNumber", card.CNumber);
+            cmd.Parameters.AddWithValue("@EDate", card.EDate);
+            cmd.Parameters.AddWithValue("@CVV", card.CVV);
+            cmd.Parameters.AddWithValue("@Id", card.CID);
+
+            cmd.ExecuteNonQuery();
+            sqlConnection.Close();
+        }
+
+        public void UpBank(Bank bank)
+        {
+            sqlConnection.Open();
+
+            var updateStatement = @"UPDATE Bank SET HOLDER=@Holder, Bank_Number=@BNumber, Bank_Name=@BName WHERE ID=@Id";
+
+            SqlCommand cmd = new SqlCommand(updateStatement, sqlConnection);
+
+            cmd.Parameters.AddWithValue("@Holder", bank.Holder);
+            cmd.Parameters.AddWithValue("@BNumber", bank.BNumber);
+            cmd.Parameters.AddWithValue("@BName", bank.BName);
+            cmd.Parameters.AddWithValue("@Id", bank.BID);
+
+            cmd.ExecuteNonQuery();
+            sqlConnection.Close();
+        }
+
+        public void UpGcash(Gcash gcash)
+        {
+            sqlConnection.Open();
+
+            var updateStatement = @"UPDATE Gcash SET Name=@Name, Gcash_Number=@GNumber WHERE ID=@Id";
+
+            SqlCommand cmd = new SqlCommand(updateStatement, sqlConnection);
+
+            cmd.Parameters.AddWithValue("@Name", gcash.Name);
+            cmd.Parameters.AddWithValue("@GNumber", gcash.GNumber);
+            cmd.Parameters.AddWithValue("@Id", gcash.GID);
 
             cmd.ExecuteNonQuery();
             sqlConnection.Close();

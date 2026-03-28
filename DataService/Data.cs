@@ -36,9 +36,24 @@ namespace DataService
             _db.InsertGcash(gcash);
         }
 
-        public ADD? GetById(Guid aid)
+        public ADD? GetByaid(Guid aid)
         {
-            return _db.GetById(aid);
+            return _db.GetByaid(aid);
+        }
+
+        public Card? GetBycid(Guid cid)
+        {
+            return _db.GetBycid(cid);
+        }
+
+        public Bank? GetBybid(Guid bid)
+        {
+            return _db.GetBybid(bid);
+        }
+
+        public Gcash? GetBygid(Guid gid)
+        {
+            return _db.GetBygid(gid);
         }
 
         public List<ADD> GetAddress()
@@ -64,6 +79,21 @@ namespace DataService
         public void UpAdd(ADD add)
         {
             _db.UpAdd(add);
+        }
+
+        public void UpCard(Card card)
+        {
+            _db.UpCard(card);
+        }
+
+        public void UpBank(Bank bank)
+        {
+            _db.UpBank(bank);
+        }
+
+        public void UpGcash(Gcash gcash)
+        {
+            _db.UpGcash(gcash);
         }
     }
 }
