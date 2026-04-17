@@ -25,16 +25,16 @@ namespace DataService
         {
             string query = @"INSERT INTO Address (ID, Name, Address, Phone_Number, Postal_Code)
                                  VALUES (@Id, @Name, @Address, @PNumber, @Pcode)";
-            SqlCommand cmd = new SqlCommand(query, sqlConnection);
+            SqlCommand ins = new SqlCommand(query, sqlConnection);
             {
                 add.AID = Guid.NewGuid();
-                cmd.Parameters.AddWithValue("@Id", add.AID);
-                cmd.Parameters.AddWithValue("@Name", add.Name);
-                cmd.Parameters.AddWithValue("@Address", add.Address);
-                cmd.Parameters.AddWithValue("@PNumber", add.PNumber);
-                cmd.Parameters.AddWithValue("@Pcode", add.Pcode);
+                ins.Parameters.AddWithValue("@Id", add.AID);
+                ins.Parameters.AddWithValue("@Name", add.Name);
+                ins.Parameters.AddWithValue("@Address", add.Address);
+                ins.Parameters.AddWithValue("@PNumber", add.PNumber);
+                ins.Parameters.AddWithValue("@Pcode", add.Pcode);
                 sqlConnection.Open();
-                cmd.ExecuteNonQuery();
+                ins.ExecuteNonQuery();
                 sqlConnection.Close();
             }
 
@@ -44,16 +44,18 @@ namespace DataService
 
         public void InsertCard(Card card)
         {
-            string query = @"INSERT INTO Card (Name, Card_Number, Expiration, cvv)
-                                 VALUES (@Name, @CNumber, @EDate, @CVV)";
-            SqlCommand cmd = new SqlCommand(query, sqlConnection);
+            string query = @"INSERT INTO Card (ID, Name, Card_Number, Expiration, cvv)
+                                 VALUES (@Id, @Name, @CNumber, @EDate, @CVV)";
+            SqlCommand ins = new SqlCommand(query, sqlConnection);
             {
-                cmd.Parameters.AddWithValue("@Name", card.Name);
-                cmd.Parameters.AddWithValue("@CNumber", card.CNumber);
-                cmd.Parameters.AddWithValue("@EDate", card.EDate);
-                cmd.Parameters.AddWithValue("@CVV", card.CVV);
+                card.CID = Guid.NewGuid();
+                ins.Parameters.AddWithValue("@Id", card.CID);
+                ins.Parameters.AddWithValue("@Name", card.Name);
+                ins.Parameters.AddWithValue("@CNumber", card.CNumber);
+                ins.Parameters.AddWithValue("@EDate", card.EDate);
+                ins.Parameters.AddWithValue("@CVV", card.CVV);
                 sqlConnection.Open();
-                cmd.ExecuteNonQuery();
+                ins.ExecuteNonQuery();
                 sqlConnection.Close();
             }
 
@@ -62,15 +64,17 @@ namespace DataService
 
         public void InsertBank(Bank bank)
         {
-            string query = @"INSERT INTO Bank (HOLDER, Bank_Number, Bank_Name)
-                                 VALUES (@Holder, @BNumber, @BName)";
-            SqlCommand cmd = new SqlCommand(query, sqlConnection);
+            string query = @"INSERT INTO Bank (ID, HOLDER, Bank_Number, Bank_Name)
+                                 VALUES (Id, @Holder, @BNumber, @BName)";
+            SqlCommand ins = new SqlCommand(query, sqlConnection);
             {
-                cmd.Parameters.AddWithValue("@Holder", bank.Holder);
-                cmd.Parameters.AddWithValue("@BNumber", bank.BNumber);
-                cmd.Parameters.AddWithValue("@BName", bank.BName);
+                bank.BID = Guid.NewGuid();
+                ins.Parameters.AddWithValue("@Id", bank.BID);
+                ins.Parameters.AddWithValue("@Holder", bank.Holder);
+                ins.Parameters.AddWithValue("@BNumber", bank.BNumber);
+                ins.Parameters.AddWithValue("@BName", bank.BName);
                 sqlConnection.Open();
-                cmd.ExecuteNonQuery();
+                ins.ExecuteNonQuery();
                 sqlConnection.Close();
             }
 
@@ -78,14 +82,16 @@ namespace DataService
 
         public void InsertGcash(Gcash gcash)
         {
-            string query = @"INSERT INTO Gcash (Name, Gcash_Number)
-                                 VALUES (@Name, @GNumber)";
-            SqlCommand cmd = new SqlCommand(query, sqlConnection);
+            string query = @"INSERT INTO Gcash (ID, Name, Gcash_Number)
+                                 VALUES (@Id, @Name, @GNumber)";
+            SqlCommand ins = new SqlCommand(query, sqlConnection);
             {
-                cmd.Parameters.AddWithValue("@Name", gcash.Name);
-                cmd.Parameters.AddWithValue("@GNumber", gcash.GNumber);
+                gcash.GID = Guid.NewGuid();
+                ins.Parameters.AddWithValue("@Id", gcash.GID);
+                ins.Parameters.AddWithValue("@Name", gcash.Name);
+                ins.Parameters.AddWithValue("@GNumber", gcash.GNumber);
                 sqlConnection.Open();
-                cmd.ExecuteNonQuery();
+                ins.ExecuteNonQuery();
                 sqlConnection.Close();
             }
 
@@ -113,6 +119,7 @@ namespace DataService
             {
                 Card c = new Card
                 {
+                    CID = Guid.NewGuid(),
                     Name = "Ronelito T. Llaguno",
                     CNumber = "123456789",
                     EDate = "2030",
@@ -126,6 +133,7 @@ namespace DataService
             {
                 Bank b = new Bank
                 {
+                    BID = Guid.NewGuid(),
                     Holder = "Ronelito T. Llaguno",
                     BNumber = "123456789",
                     BName = "BDO"
@@ -138,6 +146,7 @@ namespace DataService
             {
                 Gcash g = new Gcash
                 {
+                    GID = Guid.NewGuid(),
                     Name = "Ronelito T. Llaguno",
                     GNumber = "123456789"
                 };
@@ -151,10 +160,11 @@ namespace DataService
         {
             string selectStatement = "SELECT ID, Name, Address, Phone_Number, Postal_Code FROM Address";
 
-            SqlCommand cmd = new SqlCommand(selectStatement, sqlConnection);
+            SqlCommand get
+                = new SqlCommand(selectStatement, sqlConnection);
 
             sqlConnection.Open();
-            SqlDataReader reader = cmd.ExecuteReader();
+            SqlDataReader reader = get.ExecuteReader();
 
             var list = new List<ADD>();
 
@@ -177,74 +187,78 @@ namespace DataService
 
         public List<Card> GetCards()
         {
-            var card = new List<Card>();
+            var list = new List<Card>();
 
-            var selectStatement = "SELECT Name, Card_Number, Expiration, cvv FROM Card";
-            SqlCommand command = new SqlCommand(selectStatement, sqlConnection);
+            var selectStatement = "SELECT ID, Name, Card_Number, Expiration, cvv FROM Card";
+            SqlCommand get
+                = new SqlCommand(selectStatement, sqlConnection);
 
             sqlConnection.Open();
-            SqlDataReader reader = command.ExecuteReader();
+            SqlDataReader reader = get.ExecuteReader();
 
             while (reader.Read())
             {
-                card.Add(new Card
-                {
-                    Name = reader["Name"].ToString(),
-                    CNumber = reader["Card_Number"].ToString(),
-                    EDate = reader["Expiration"].ToString(),
-                    CVV = reader["cvv"].ToString()
-                });
+                Card card = new Card();
+
+                card.CID = Guid.Parse(reader["ID"].ToString());
+                card.Name = reader["Name"].ToString();
+                card.CNumber = reader["Card_Number"].ToString();
+                card.EDate = reader["Expiration"].ToString();
+                card.CVV = reader["cvv"].ToString();
+                
             }
 
             sqlConnection.Close();
-            return card;
+            return list;
         }
 
         public List<Bank> GetBanks()
         {
-            var bank = new List<Bank>();
+            var list = new List<Bank>();
 
-            var selectStatement = "SELECT HOLDER, Bank_Number, Bank_Name FROM Bank";
-            SqlCommand command = new SqlCommand(selectStatement, sqlConnection);
+            var selectStatement = "SELECT ID, HOLDER, Bank_Number, Bank_Name FROM Bank";
+            SqlCommand get = new SqlCommand(selectStatement, sqlConnection);
 
             sqlConnection.Open();
-            SqlDataReader reader = command.ExecuteReader();
+            SqlDataReader reader = get.ExecuteReader();
 
             while (reader.Read())
             {
-                bank.Add(new Bank
-                {
-                    Holder = reader["HOLDER"].ToString(),
-                    BNumber = reader["Bank_Name"].ToString(),
-                    BName = reader["Bank_Name"].ToString()
-                });
+                Bank bank = new Bank();
+
+                bank.BID = Guid.Parse(reader["ID"].ToString());
+                bank.Holder = reader["HOLDER"].ToString();
+                bank.BNumber = reader["Bank_Name"].ToString();
+                bank.BName = reader["Bank_Name"].ToString();
+                
             }
 
             sqlConnection.Close();
-            return bank;
+            return list;
         }
 
         public List<Gcash> GetGcash()
         {
-            var gcash = new List<Gcash>();
+            var list = new List<Gcash>();
 
-            var selectStatement = "SELECT Name, Gcash_Number FROM Gcash";
-            SqlCommand command = new SqlCommand(selectStatement, sqlConnection);
+            var selectStatement = "SELECT ID, Name, Gcash_Number FROM Gcash";
+            SqlCommand get = new SqlCommand(selectStatement, sqlConnection);
 
             sqlConnection.Open();
-            SqlDataReader reader = command.ExecuteReader();
+            SqlDataReader reader = get.ExecuteReader();
 
             while (reader.Read())
             {
-                gcash.Add(new Gcash
-                {
-                    Name = reader["Name"].ToString(),
-                    GNumber = reader["Gcash_Number"].ToString()
-                });
+                Gcash gcash = new Gcash();
+
+                gcash.GID = Guid.Parse(reader["ID"].ToString());
+                gcash.Name = reader["Name"].ToString();
+                gcash.GNumber = reader["Gcash_Number"].ToString();
+             
             }
 
             sqlConnection.Close();
-            return gcash;
+            return list;
         }
 
         public ADD? GetByaid(Guid id)
@@ -273,15 +287,15 @@ namespace DataService
 
             var updateStatement = @"UPDATE Address SET Name=@Name, Address=@Address, Phone_Number=@PNumber, Postal_Code=@Pcode WHERE ID=@Id";
 
-            SqlCommand cmd = new SqlCommand(updateStatement, sqlConnection);
+            SqlCommand up = new SqlCommand(updateStatement, sqlConnection);
 
-            cmd.Parameters.AddWithValue("@Name", add.Name);
-            cmd.Parameters.AddWithValue("@Address", add.Address);
-            cmd.Parameters.AddWithValue("@PNumber", add.PNumber);
-            cmd.Parameters.AddWithValue("@Pcode", add.Pcode);
-            cmd.Parameters.AddWithValue("@Id", add.AID);
+            up.Parameters.AddWithValue("@Name", add.Name);
+            up.Parameters.AddWithValue("@Address", add.Address);
+            up.Parameters.AddWithValue("@PNumber", add.PNumber);
+            up.Parameters.AddWithValue("@Pcode", add.Pcode);
+            up.Parameters.AddWithValue("@Id", add.AID);
 
-            cmd.ExecuteNonQuery();
+            up.ExecuteNonQuery();
             sqlConnection.Close();
         }
 
@@ -291,15 +305,15 @@ namespace DataService
 
             var updateStatement = @"UPDATE Card SET Name=@Name, Card_Number=@CNumber, Expiration=@EDate, cvv=@CVV WHERE ID=@Id";
 
-            SqlCommand cmd = new SqlCommand(updateStatement, sqlConnection);
+            SqlCommand up = new SqlCommand(updateStatement, sqlConnection);
 
-            cmd.Parameters.AddWithValue("@Name", card.Name);
-            cmd.Parameters.AddWithValue("@CNumber", card.CNumber);
-            cmd.Parameters.AddWithValue("@EDate", card.EDate);
-            cmd.Parameters.AddWithValue("@CVV", card.CVV);
-            cmd.Parameters.AddWithValue("@Id", card.CID);
+            up.Parameters.AddWithValue("@Name", card.Name);
+            up.Parameters.AddWithValue("@CNumber", card.CNumber);
+            up.Parameters.AddWithValue("@EDate", card.EDate);
+            up.Parameters.AddWithValue("@CVV", card.CVV);
+            up.Parameters.AddWithValue("@Id", card.CID);
 
-            cmd.ExecuteNonQuery();
+            up.ExecuteNonQuery();
             sqlConnection.Close();
         }
 
@@ -309,14 +323,14 @@ namespace DataService
 
             var updateStatement = @"UPDATE Bank SET HOLDER=@Holder, Bank_Number=@BNumber, Bank_Name=@BName WHERE ID=@Id";
 
-            SqlCommand cmd = new SqlCommand(updateStatement, sqlConnection);
+            SqlCommand up = new SqlCommand(updateStatement, sqlConnection);
 
-            cmd.Parameters.AddWithValue("@Holder", bank.Holder);
-            cmd.Parameters.AddWithValue("@BNumber", bank.BNumber);
-            cmd.Parameters.AddWithValue("@BName", bank.BName);
-            cmd.Parameters.AddWithValue("@Id", bank.BID);
+            up.Parameters.AddWithValue("@Holder", bank.Holder);
+            up.Parameters.AddWithValue("@BNumber", bank.BNumber);
+            up.Parameters.AddWithValue("@BName", bank.BName);
+            up.Parameters.AddWithValue("@Id", bank.BID);
 
-            cmd.ExecuteNonQuery();
+            up.ExecuteNonQuery();
             sqlConnection.Close();
         }
 
@@ -326,14 +340,15 @@ namespace DataService
 
             var updateStatement = @"UPDATE Gcash SET Name=@Name, Gcash_Number=@GNumber WHERE ID=@Id";
 
-            SqlCommand cmd = new SqlCommand(updateStatement, sqlConnection);
+            SqlCommand up = new SqlCommand(updateStatement, sqlConnection);
 
-            cmd.Parameters.AddWithValue("@Name", gcash.Name);
-            cmd.Parameters.AddWithValue("@GNumber", gcash.GNumber);
-            cmd.Parameters.AddWithValue("@Id", gcash.GID);
+            up.Parameters.AddWithValue("@Name", gcash.Name);
+            up.Parameters.AddWithValue("@GNumber", gcash.GNumber);
+            up.Parameters.AddWithValue("@Id", gcash.GID);
 
-            cmd.ExecuteNonQuery();
+            up.ExecuteNonQuery();
             sqlConnection.Close();
         }
+
     }
 }
